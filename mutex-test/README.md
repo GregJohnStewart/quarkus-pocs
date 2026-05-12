@@ -1,5 +1,11 @@
 # mutex-test
 
+This service is an example of providing a one-at-a-time flow of transactions through the service.
+
+A `ReentrantLock` is used to provide this, locking before the Quarkus transaction starts.
+
+
+
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
