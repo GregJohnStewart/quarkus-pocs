@@ -1,5 +1,6 @@
 package org.acme.service;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import org.acme.dao.MyEntity;
@@ -17,13 +18,24 @@ public class EntityService {
     @Inject
     TransactionService transactionService;
 
+    @WithSpan
+    public void doExtraWork() throws InterruptedException {
+        Duration worktime = Duration.ofSeconds(random.nextInt(2, 5));
+        log.info("Doing {} of work...", worktime);
+        Thread.sleep(
+                worktime
+        );
+        log.info("Work done!");
+    }
+
     public MyEntity create(MyEntity entity) throws InterruptedException {
-        try(TransactionService.TransactionResource resource = this.transactionService.getTransaction(true)){
+        try(
+                TransactionService.TransactionResource resource = this.transactionService.getTransaction(true)
+        ) {
             log.info("Creating entity...");
-            entity.persist();
-            Thread.sleep(
-                    Duration.ofSeconds(random.nextInt(2, 5))
-            );
+            entity.persistAndFlush();
+            log.info("Entity created!");
+            this.doExtraWork();
 
             log.info("Created entity {}", entity);
         }

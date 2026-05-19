@@ -16,7 +16,7 @@ public class Other {
     MyEntityDaoService  myEntityDaoService;
 
     @GET
-    public String getEntities() {
+    public String getDbVersion() {
         return myEntityDaoService.getDatabaseVersion();
     }
 

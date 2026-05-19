@@ -1,5 +1,6 @@
 package org.acme.service;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -14,6 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TransactionService {
     private final ReentrantLock lock = new ReentrantLock();
 
+    @WithSpan
     public void startTransaction() {
         log.info("Starting transaction...");
 

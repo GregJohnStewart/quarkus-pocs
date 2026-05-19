@@ -1,7 +1,6 @@
 package org.acme.rest;
 
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -30,12 +29,16 @@ public class EntityCrud {
 
     @GET
     public List<MyEntity> getEntities() {
+        log.info("Getting entities.");
+
         return MyEntity.findAll().list();
     }
 
     @GET
     @Path("{id}")
     public MyEntity getEntity(@PathParam("id") String id) {
+        log.info("Getting entity with id {}", id);
+
         return MyEntity.findById(id);
     }
 
