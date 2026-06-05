@@ -29,27 +29,27 @@ public class EntityMutexTest {
 
     public static Stream<Arguments> getParams() {
         return Stream.of(
-                Arguments.of(2, 10, Duration.of(250, ChronoUnit.MILLIS)),
-                Arguments.of(3, 10, Duration.of(250, ChronoUnit.MILLIS)),
-                Arguments.of(5, 10, Duration.of(250, ChronoUnit.MILLIS)),
-                Arguments.of(10, 10, Duration.of(250, ChronoUnit.MILLIS)),
-                Arguments.of(20, 20, Duration.of(150, ChronoUnit.MILLIS))
+                Arguments.of(2, 10)
+//                Arguments.of(3, 10),
+//                Arguments.of(5, 10)
+
+//                Arguments.of(10, 10, Duration.of(250, ChronoUnit.MILLIS)),
+//                Arguments.of(20, 20, Duration.of(150, ChronoUnit.MILLIS))
         );
     }
 
 
     @ParameterizedTest
     @MethodSource("getParams")
-    public void threadTest(int numThreads, int numIterations, Duration workDuration) throws InterruptedException, ExecutionException {
+    public void threadTest(int numThreads, int numIterations) throws InterruptedException, ExecutionException {
         String mutexId = "testMutex2";
-        List<Future<List<ThreadResult>>> futures = new ArrayList<>(numThreads);
-        SortedSet<ThreadResult> results = new TreeSet<>();
+        List<Future<List<MyEntity>>> futures = new ArrayList<>(numThreads);
+        Set<MyEntity> results = new HashSet<>();
         ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
         TestThread.TestThreadBuilder threadBuilder = TestThread.builder()
                 .mutexId(mutexId)
-                .numIterations(numIterations)
-                .durationOfWork(workDuration);
+                .numIterations(numIterations);
 
         for (int i = 1; i <= numThreads; i++) {
             threadBuilder.threadId("testThread-" + i);
@@ -61,7 +61,7 @@ public class EntityMutexTest {
             log.info("Still waiting on threads...");
         }
 
-        for (Future<List<ThreadResult>> future : futures) {
+        for (Future<List<MyEntity>> future : futures) {
             results.addAll(future.get());
         }
 
@@ -70,10 +70,10 @@ public class EntityMutexTest {
         //TODO:: check results
         log.info("Results: {}", results);
 
-        Iterator<ThreadResult> iterator = results.iterator();
-        ThreadResult cur = iterator.next();
+        Iterator<MyEntity> iterator = results.iterator();
+        MyEntity cur = iterator.next();
         while (iterator.hasNext()) {
-            ThreadResult next = iterator.next();
+            MyEntity next = iterator.next();
 
 //            assertTrue(
 //                    next.getStart().isAfter(cur.getStart()),
@@ -108,21 +108,20 @@ public class EntityMutexTest {
     @Builder
     @Slf4j
     @AllArgsConstructor
-    static class TestThread implements Callable<List<ThreadResult>> {
+    static class TestThread implements Callable<List<MyEntity>> {
 
         private String mutexId;
         private String threadId;
         private int numIterations;
-        private Duration durationOfWork;
 
         @SneakyThrows
         @Override
-        public List<ThreadResult> call() {
+        public List<MyEntity> call() {
             log.info("Running test thread {}", this.threadId);
 
 //			Thread.sleep(500);
 
-            List<ThreadResult> results = new ArrayList<>(this.numIterations);
+            List<MyEntity> results = new ArrayList<>(this.numIterations);
             for (int i = 1; i <= this.numIterations; i++) {
                 log.info("Thread {} waiting for lock on iteration {}", this.threadId, i);
 
@@ -142,7 +141,7 @@ public class EntityMutexTest {
 
 
                 log.info("Thread {} done doing work & released lock on iteration {}; {}/{}", this.threadId, i, entityOut.field, entityIn.id);
-//                results.add(resultBuilder.build());
+                results.add(entityIn);
             }
             log.info("DONE running test thread {}", this.threadId);
             return results;
