@@ -4,7 +4,43 @@ This service is an example of providing a one-at-a-time flow of transactions thr
 
 A `ReentrantLock` is used to provide this, locking before the Quarkus transaction starts.
 
+## Demos
 
+### 01 Database Access and Transactions
+
+### 02 Healthchecks, testing, and container building
+
+#### Healthchecks
+
+Quarkus provides (through `quarkus-smallrye-health`) the ability to introduce a standardized healthcheck.
+
+Steps:
+
+1. Start Quarkus (in dev mode): `./mvnw quarkus:dev`
+2. In browser, goto `http://localhost:8080/q/health` (or `curl http://localhost:8080/q/health | jq`)
+3. See the healthceck
+4. Also note liveness, readiness;
+    - `http://localhost:8080/q/health/live`
+    - `http://localhost:8080/q/health/ready`
+5. See "Custom Health Check", defined by [LivenessHealthCheck](src/main/java/org/acme/health/LivenessHealthCheck.java)
+
+#### Testing
+
+Quarkus comes out of the box with a wide array of robust testing tools and supported methodologies
+
+Steps:
+
+1. Observe [EntityMutexTest](src/test/java/org/acme/EntityMutexTest.java); fairly standard testing setup. Things to point out:
+    - `@Quarkustest`
+    - `@TestHTTPEndpoint(EntityCrud.class)`
+    - `testList()`, specifically the way we call / test the endpoint
+2. Run the tests `./mvnw clean verify`
+   - During, watch output and `watch docker ps`
+3. Run the integration tests `./mvnw clean verify -Dquarkus.container-image.build=true -DskipITs=false`
+   - Also keep watching `watch docker ps`
+
+
+# Quarkus Stuff
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
@@ -61,10 +97,13 @@ If you want to learn more about building native executables, please consult <htt
 
 ## Related Guides
 
-- Observability ([guide](https://quarkus.io/guides/observability-devservices-lgtm)): Serve and consume Observability Dev Services
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplified JPA/Hibernate data access layer with active record and repository patterns
+- Observability ([guide](https://quarkus.io/guides/observability-devservices-lgtm)): Serve and consume Observability Dev
+  Services
+- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplified JPA/Hibernate data
+  access layer with active record and repository patterns
 - JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-- Micrometer metrics ([guide](https://quarkus.io/guides/micrometer)): Instrument the runtime and your application with dimensional metrics using Micrometer.
+- Micrometer metrics ([guide](https://quarkus.io/guides/micrometer)): Instrument the runtime and your application with
+  dimensional metrics using Micrometer.
 
 ## Provided Code
 
@@ -74,9 +113,7 @@ Create your first JPA entity
 
 [Related guide section...](https://quarkus.io/guides/hibernate-orm)
 
-
 [Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
 
 ### LGTM Observability
 
