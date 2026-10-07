@@ -7,7 +7,7 @@ import io.restassured.http.ContentType;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.acme.dao.MyEntity;
-import org.acme.rest.EntityCrud;
+import org.acme.extInterface.rest.EntityCrud;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

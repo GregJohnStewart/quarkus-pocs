@@ -14,3 +14,15 @@ quarkus:
       telemetry: true
   hibernate-orm:
     metrics: true
+
+# To connect to shared Artemis broker, not devservice
+#amqp-host: 192.168.122.76
+#amqp-port: 5672
+#amqp-username: admin
+#amqp-password: admin
+
+mp:
+  messaging:
+    incoming:
+      requests:
+        address: quote-requests

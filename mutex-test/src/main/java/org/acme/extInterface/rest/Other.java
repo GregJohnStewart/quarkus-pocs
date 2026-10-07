@@ -1,4 +1,4 @@
-package org.acme.rest;
+package org.acme.extInterface.rest;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
