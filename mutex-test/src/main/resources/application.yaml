@@ -26,3 +26,18 @@ mp:
     incoming:
       requests:
         address: quote-requests
+        connector: smallrye-amqp
+      priority-queue-in:
+        address: app-priority-queue
+        connector: smallrye-amqp
+        prefetch: 1
+
+    outgoing:
+      priority-queue-out:
+        address: app-priority-queue
+        connector: smallrye-amqp
+smallrye:
+  messaging:
+    worker:
+      single-thread-pool:
+        max-concurrency: 1

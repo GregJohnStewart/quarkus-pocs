@@ -1,0 +1,6 @@
+<address-settings>
+    <address-setting match="app-priority-queue">
+        <!-- Tells Artemis to maintain priority order inside the queue -->
+        <prioritized-messages>true</prioritized-messages>
+    </address-setting>
+</address-settings>
