@@ -47,12 +47,16 @@ public class App {
 
             System.out.println("Created/connected to queue.");
 
-            String messageBody = "Hello World!";
 
             // 4. Create the producer and send the message
-            context.createProducer().send(queue, messageBody);
+            JMSProducer producer = context.createProducer();
 
-            System.out.println("Sent message: " + messageBody);
+            for(int i = 9; i >= 0; i--) {
+                String messageBody = "{\"name\": \"test "+i+"\", \"priority\":\""+i+"\"}";
+                producer.send(queue, messageBody);
+
+                System.out.println("Sent message: " + messageBody);
+            }
 
         } catch (Exception e) {
             System.err.println("Error sending JMS message: " + e.getMessage());
