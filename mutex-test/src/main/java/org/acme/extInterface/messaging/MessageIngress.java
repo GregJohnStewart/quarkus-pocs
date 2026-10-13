@@ -22,12 +22,13 @@ public class MessageIngress {
     @Incoming("requests")
     @Outgoing("priority-queue-out")
     public Message<AppMessage> processToPriority(AppMessage quoteRequest) {
-        log.info("Got request. Putting on priority queue: {}", quoteRequest);
+        short priority = quoteRequest.getPriority();
+        log.info("Got request. Putting on priority queue: {}/{}", quoteRequest, priority);
 
         Message<AppMessage> output = Message.of(quoteRequest);
-        output.addMetadata(
+        output = output.addMetadata(
                 OutgoingAmqpMetadata.builder()
-                .withPriority(quoteRequest.getPriority())
+                .withPriority(priority)
                 .build()
         );
 

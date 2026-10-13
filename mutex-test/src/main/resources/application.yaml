@@ -28,9 +28,10 @@ mp:
         address: quote-requests
         connector: smallrye-amqp
       priority-queue-in:
+        enabled: true
         address: app-priority-queue
         connector: smallrye-amqp
-        prefetch: 1
+        initial-credits: 1
 
     outgoing:
       priority-queue-out:
