@@ -3,12 +3,16 @@ package com.example;
 import javax.jms.*;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory; // Provider specific implementation
 
+import java.util.Random;
+
 /**
  * Hello world!
  */
 public class App {
     private static final String CONN_STRING = "tcp://192.168.122.76:61616";
     private static final String QUEUE = "quote-requests";
+    private static final Random RAND = new Random();
+    private static final long WAIT = 100;
 
 
     public static void main(String[] args) {
@@ -51,11 +55,15 @@ public class App {
             // 4. Create the producer and send the message
             JMSProducer producer = context.createProducer();
 
-            for(int i = 9; i >= 0; i--) {
-                String messageBody = "{\"name\": \"test "+i+"\", \"priority\":\""+i+"\"}";
+            for(int i = 0; i <= 1000; i++){
+//                int curPriority = i%10;
+                int curPriority = RAND.nextInt(1,9);
+
+                String messageBody = "{\"name\": \"test " + i + "\", \"priority\":\"" + curPriority + "\"}";
                 producer.send(queue, messageBody);
 
                 System.out.println("Sent message: " + messageBody);
+                Thread.sleep(WAIT);
             }
 
         } catch (Exception e) {
@@ -64,6 +72,6 @@ public class App {
             System.exit(1);
         }
 
-        System.out.println("Message sent!");
+        System.out.println("Messages sent!");
     }
 }
