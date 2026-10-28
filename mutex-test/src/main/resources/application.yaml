@@ -4,7 +4,8 @@ quarkus:
     group: demo
   log:
     console:
-      format: "%d{HH:mm:ss} [%-5p][%-16X{traceId}|%-2X{parentId}|%-16X{spanId}|%-5X{sampled}][%-40c{2.}|%-26t] %s%e%n"
+      format: "%d{HH:mm:ss:SSS} [%-5p][%-16X{traceId}|%-2X{parentId}|%-16X{spanId}|%-5X{sampled}][%-40c{2.}|%-26t] %s%e%n"
+    level: DEBUG
   datasource:
     metrics:
       enabled: true
@@ -14,6 +15,8 @@ quarkus:
       telemetry: true
   hibernate-orm:
     metrics: true
+  jackson:
+    write-dates-as-timestamps: true
 
 # To connect to shared Artemis broker, not devservice
 #amqp-host: 192.168.122.76
